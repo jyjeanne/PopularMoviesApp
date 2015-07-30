@@ -1,7 +1,7 @@
 <resources>
     <!-- General App setting-->
 
-    <string name="app_name">Popular Movies App</string>
+    <string name="app_name">Popular Movies</string>
 
     <!-- Action setting -->
     <string name="action_discover_by_popularity">Discover by Popularity</string>
@@ -21,15 +21,22 @@
     <string name="API_param_key">b1cdfe22af5862dd6a7754eff0f0f776</string>
 
     <string name="API_poster_base_URL">http://image.tmdb.org/t/p</string>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="title_activity_movie_detail">Movie Detail</string>
 
     <string name="sort_by_key">sort_by</string>
+
     <string name="movieArray">movieArray</string>
     <string name="movie">movie</string>
     <string name="discover">discover</string>
     <string name="moviedb_api_url">api.themoviedb.org</string>
     <string name="number_three">3</string>
     <string name="http_protocol">http</string>
+    <string name="pref_sorting_criteria_key">sort_by</string>
+    <string name="pref_sorting_order_key">sort_by</string>
+    <string name="pref_sorting_order_default_value">popularity.desc</string>
+    <string name="sorting_criteria_key">sorting_criteria</string>
+    <string name="movie_key">movie</string>
+    <string name="movie_array_key">movieArray</string>
 
     <string-array name="sort_by_entries">
         <item>Descending Popularity</item>

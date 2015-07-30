@@ -5,6 +5,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -31,7 +32,11 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         super.onCreate(savedInstanceState);
         // Add general preference
         addPreferencesFromResource(R.xml.pref_general);
-        bindPreferenceSummaryToValue(findPreference("sort_by"));
+
+        // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
+        // updated when the preference changes.
+        //bindPreferenceSummaryToValue(findPreference(getString(R.string.sorting_criteria_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorting_order_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
@@ -64,5 +69,14 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         }
         return true;
     }
+
+    // Add to save SharedPreferences between activies
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
+        moveTaskToBack(true);
+    }
+
+
 
 }

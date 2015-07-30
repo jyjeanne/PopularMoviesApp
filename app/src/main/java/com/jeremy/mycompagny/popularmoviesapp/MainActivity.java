@@ -28,7 +28,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+/**
+ * The main activity
+ */
 public class MainActivity extends Activity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -39,7 +41,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "entered onCreate method");
+        Log.d(LOG_TAG, "entered onCreate method");
 
         super.onCreate(savedInstanceState);
 
@@ -49,34 +51,32 @@ public class MainActivity extends Activity {
         /* Get the gridView */
         GridView gridView = (GridView) findViewById(R.id.gridView);
 
-        /* create the adapter */
+        /* Create the custom adapter */
         moviePosterAdapter = new MoviePosterAdapter(
                 this, // The current context (this activity)
                 new ArrayList<Movie>());
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            // define onClick action
+            // Overide onClick action
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Parcelable movie = moviePosterAdapter.getItem(position);
                 Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class)
-                        .putExtra("movie", movie);
+                        .putExtra(getString(R.string.movie_key), movie);
                 startActivity(intent);
 
             }
         });
 
         gridView.setAdapter(moviePosterAdapter);
-        Log.v(LOG_TAG, "gridView.setAdapter(mMoviePosterAdapter) passed");
+        Log.d(LOG_TAG, "gridView.setAdapter(mMoviePosterAdapter) passed");
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("movieArray")) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.movie_array_key))) {
 
-            Log.v(LOG_TAG, "savedInstanceState is not null, and it does contain a key called movieArray");
-            Log.v(LOG_TAG, "retrieving movies from saved movieArray");
+            Log.d(LOG_TAG, "savedInstanceState is not null, and it does contain a key called movieArray");
 
-
-            Parcelable[] movieArray = savedInstanceState.getParcelableArray("movieArray");
+            Parcelable[] movieArray = savedInstanceState.getParcelableArray(getString(R.string.movie_array_key));
             movieArrayList = new ArrayList<Movie>();
             for (Parcelable movie : movieArray) {
                 movieArrayList.add((Movie) movie);
@@ -84,11 +84,11 @@ public class MainActivity extends Activity {
 
             moviePosterAdapter.clear();
             moviePosterAdapter.addAll(movieArrayList);
-            Log.v(LOG_TAG, "movieArrayList has been added to mMoviePosterAdapter");
+            Log.d(LOG_TAG, "movieArrayList has been added to mMoviePosterAdapter");
         } else {
 
-            Log.v(LOG_TAG, "savedInstance state is either null or does not contain a \"movieArray\"");
-            Log.v(LOG_TAG, "updating movies via API call");
+            Log.d(LOG_TAG, "savedInstance state is either null or does not contain a \"movieArray\"");
+            Log.d(LOG_TAG, "updating movies via API call");
 
             updateMovies();
         }
@@ -106,8 +106,8 @@ public class MainActivity extends Activity {
 
         super.onSaveInstanceState(outState);
 
-        Log.v(LOG_TAG, "instanceState saved");
-        Log.v(LOG_TAG, "outState.containsKey(\"movieArray\"): "
+        Log.d(LOG_TAG, "instanceState saved");
+        Log.d(LOG_TAG, "outState.containsKey(\"movieArray\"): "
                 + String.valueOf(outState.containsKey("movieArray")));
     }
 
@@ -126,7 +126,7 @@ public class MainActivity extends Activity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
-                //return true;
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
         @Override
         protected Movie[] doInBackground(String... sortOption) {
 
-            Log.v(LOG_TAG, "Entered in doing in background");
+            Log.d(LOG_TAG, "Entered in doing in background");
 
             URL queryURL = getQueryURL(sortOption[0]);
             String moviesJsonStr = getMoviesData(queryURL);
@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Movie[] movies) {
 
-            Log.v(LOG_TAG, "entered onPostExecute");
+            Log.d(LOG_TAG, "entered onPostExecute");
 
             if (movies != null) {
                 movieArrayList = new ArrayList<Movie>(Arrays.asList(movies));
@@ -169,6 +169,12 @@ public class MainActivity extends Activity {
             }
         }
 
+        /**
+         * Make the URL for the API
+         *
+         * @param sortOption
+         * @return URL of the API
+         */
         private URL getQueryURL(String sortOption) {
 
             final String LOG_TAG = "getQueryURL";
@@ -183,7 +189,7 @@ public class MainActivity extends Activity {
                         .appendQueryParameter(getString(R.string.API_query_sort_by), sortOption)
                         .appendQueryParameter(getString(R.string.API_query_key), getString(R.string.API_param_key));
 
-                //Log.v(LOG_TAG, builder.build().toString());
+                Log.d(LOG_TAG, builder.build().toString());
 
                 return new URL(builder.build().toString());
 
@@ -258,6 +264,13 @@ public class MainActivity extends Activity {
             }
         }
 
+        /**
+         * Convert JSon to movie Object
+         *
+         * @param moviesDataStr
+         * @return Array of Movie
+         * @throws JSONException
+         */
         private Movie[] getMovieArrayFromJsonStr(String moviesDataStr)
                 throws JSONException {
 
@@ -298,8 +311,6 @@ public class MainActivity extends Activity {
 
                 moviesObjectArray[i] = movieObject;
 
-                //Log.v(LOG_TAG,"Movie " + i + ": " + moviesObjectArray[i].getMovieTitle());
-
             }
 
             return moviesObjectArray;
@@ -311,10 +322,13 @@ public class MainActivity extends Activity {
      * Update Movie Data with AsyncTask
      */
     public void updateMovies() {
+
         FetchMoviesTask moviesTask = new FetchMoviesTask();
+        // Read shared Preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortBy = prefs.getString(getString(R.string.sort_by_key),
-                getString(R.string.API_param_descending_popularity));
-        moviesTask.execute(sortBy);
+        String sortingOrder = prefs.getString(getString(R.string.pref_sorting_order_key),
+                getString(R.string.pref_sorting_order_default_value));
+        // Execute the task
+        moviesTask.execute(sortingOrder);
     }
 }

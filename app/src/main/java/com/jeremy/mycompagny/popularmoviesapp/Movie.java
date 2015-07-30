@@ -6,9 +6,6 @@ import android.os.Parcelable;
 
 /**
  * Movie Model Object.
- *
- * @author Jeremy
- * @version 1.0.
  */
 public class Movie implements Parcelable {
 

@@ -19,7 +19,7 @@ public class MoviePosterAdapter extends ArrayAdapter<Movie> {
     private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
 
     /**
-     * Constructor
+     * CoCustom nstructor
      *
      * @param context
      * @param movies
