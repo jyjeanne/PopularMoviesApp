@@ -1,8 +1,9 @@
 package com.jeremy.mycompagny.popularmoviesapp;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,9 +50,13 @@ public class MovieDetailFragment extends Fragment {
 
             ((TextView)(rootView.findViewById(R.id.movie_rating)))
                     .setText
-                            (String.valueOf(movie.getMovieUserRating())+"/10");
+                            (String.valueOf(movie.getMovieUserRating()) + "/10");
 
-            ((TextView)(rootView.findViewById(R.id.movie_synopsis))).setText(movie.getMovieSynopsis());
+            TextView synopsis = (TextView)(rootView.findViewById(R.id.movie_synopsis));
+            synopsis.setText(movie.getMovieSynopsis());
+            synopsis.setMovementMethod(new ScrollingMovementMethod());
+
+
         }
 
         return rootView;
