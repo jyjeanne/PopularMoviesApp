@@ -3,7 +3,6 @@ package com.jeremy.mycompagny.popularmoviesapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,7 +39,7 @@ public class MovieDetailActivity extends Activity {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             // Respond to the action bar's Settings button
             case R.id.action_settings:
