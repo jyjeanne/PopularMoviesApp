@@ -37,6 +37,7 @@
     <string name="sorting_criteria_key">sorting_criteria</string>
     <string name="movie_key">movie</string>
     <string name="movie_array_key">movieArray</string>
+    <string name="network_not_available_message">Network is not available</string>
 
     <string-array name="sort_by_entries">
         <item>Descending Popularity</item>

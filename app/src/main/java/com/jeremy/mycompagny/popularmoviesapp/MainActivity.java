@@ -1,8 +1,11 @@
 package com.jeremy.mycompagny.popularmoviesapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,49 +52,64 @@ public class MainActivity extends Activity {
         /* Set the activity layout */
         setContentView(R.layout.activity_main);
 
-        /* Get the gridView */
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+        /* Test if Network is available */
+        if (!isNetworkAvailable()) {
 
-        /* Create the custom adapter */
-        moviePosterAdapter = new MoviePosterAdapter(
-                this, // The current context (this activity)
-                new ArrayList<Movie>());
+            Log.e(LOG_TAG, "Network is not available");
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            Context context = getApplicationContext();
+            CharSequence text = getString(R.string.network_not_available_message);
+            int duration = Toast.LENGTH_LONG;
 
-            // Overide onClick action
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Parcelable movie = moviePosterAdapter.getItem(position);
-                Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class)
-                        .putExtra(getString(R.string.movie_key), movie);
-                startActivity(intent);
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
 
-            }
-        });
-
-        gridView.setAdapter(moviePosterAdapter);
-        Log.d(LOG_TAG, "gridView.setAdapter(mMoviePosterAdapter) passed");
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.movie_array_key))) {
-
-            Log.d(LOG_TAG, "savedInstanceState is not null, and it does contain a key called movieArray");
-
-            Parcelable[] movieArray = savedInstanceState.getParcelableArray(getString(R.string.movie_array_key));
-            movieArrayList = new ArrayList<Movie>();
-            for (Parcelable movie : movieArray) {
-                movieArrayList.add((Movie) movie);
-            }
-
-            moviePosterAdapter.clear();
-            moviePosterAdapter.addAll(movieArrayList);
-            Log.d(LOG_TAG, "movieArrayList has been added to mMoviePosterAdapter");
         } else {
 
-            Log.d(LOG_TAG, "savedInstance state is either null or does not contain a \"movieArray\"");
-            Log.d(LOG_TAG, "updating movies via API call");
+            /* Get the gridView */
+            GridView gridView = (GridView) findViewById(R.id.gridView);
 
-            updateMovies();
+            /* Create the custom adapter */
+            moviePosterAdapter = new MoviePosterAdapter(
+                    this, // The current context (this activity)
+                    new ArrayList<Movie>());
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                // Overide onClick action
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Parcelable movie = moviePosterAdapter.getItem(position);
+                    Intent intent = new Intent(getBaseContext(), MovieDetailActivity.class)
+                            .putExtra(getString(R.string.movie_key), movie);
+                    startActivity(intent);
+
+                }
+            });
+
+            gridView.setAdapter(moviePosterAdapter);
+            Log.d(LOG_TAG, "gridView.setAdapter(mMoviePosterAdapter) passed");
+
+            if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.movie_array_key))) {
+
+                Log.d(LOG_TAG, "savedInstanceState is not null, and it does contain a key called movieArray");
+
+                Parcelable[] movieArray = savedInstanceState.getParcelableArray(getString(R.string.movie_array_key));
+                movieArrayList = new ArrayList<Movie>();
+                for (Parcelable movie : movieArray) {
+                    movieArrayList.add((Movie) movie);
+                }
+
+                moviePosterAdapter.clear();
+                moviePosterAdapter.addAll(movieArrayList);
+                Log.d(LOG_TAG, "movieArrayList has been added to mMoviePosterAdapter");
+            } else {
+
+                Log.d(LOG_TAG, "savedInstance state is either null or does not contain a \"movieArray\"");
+                Log.d(LOG_TAG, "updating movies via API call");
+
+                updateMovies();
+            }
         }
     }
 
@@ -130,6 +149,17 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Test status of network connection
+     *
+     * @return true if network is available
+     */
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isAvailable() && activeNetworkInfo.isConnected();
     }
 
     // AsyncTask for :
