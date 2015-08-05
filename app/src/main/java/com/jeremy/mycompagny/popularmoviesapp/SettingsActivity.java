@@ -1,11 +1,13 @@
 package com.jeremy.mycompagny.popularmoviesapp;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NavUtils;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -18,14 +20,7 @@ import android.support.v4.app.NavUtils;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
-    /**
-     * Determines whether to always show the simplified settings UI, where
-     * settings are presented in a single list. When false, settings are shown
-     * as a master/detail two-pane view on tablets. When true, a single pane is
-     * shown on tablets.
-     */
-    private final String LOG_TAG = SettingsActivity.class.getSimpleName();
+public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +30,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        //bindPreferenceSummaryToValue(findPreference(getString(R.string.sorting_criteria_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorting_order_key)));
     }
 
@@ -70,13 +64,10 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         return true;
     }
 
-    // Add to save SharedPreferences between activies
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
-        moveTaskToBack(true);
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
-
-
 
 }

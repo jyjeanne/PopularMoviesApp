@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.jeremy.mycompagny.popularmoviesapp.MovieDetailFragment">
@@ -8,10 +9,10 @@
         android:id="@+id/movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:background="@color/green"
-        android:textSize="24sp"
-        android:textColor="@color/black"/>
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,39 +22,44 @@
         android:paddingTop="8dp">
 
         <ImageView
-            tools:ignore="ContentDescription"
             android:id="@+id/movie_thumbnail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_width = "wrap_content"
-            android:layout_height = "match_parent"
             android:paddingLeft="12dp">
 
             <TextView
                 android:id="@+id/movie_release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"/>
+                android:padding="2dp" />
 
             <TextView
                 android:id="@+id/movie_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"/>
+                android:padding="2dp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/movie_synopsis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars = "vertical"
-        android:padding="12dp"/>
+        <TextView
+            android:id="@+id/movie_synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:scrollbars="vertical" />
+    </ScrollView>
 
 </LinearLayout>

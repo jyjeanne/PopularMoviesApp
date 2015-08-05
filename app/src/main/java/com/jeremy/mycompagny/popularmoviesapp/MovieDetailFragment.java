@@ -37,25 +37,22 @@ public class MovieDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
 
         Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra("movie")){
+        if (intent != null && intent.hasExtra("movie")) {
             Movie movie = (intent.getParcelableExtra("movie"));
 
-            ((TextView)(rootView.findViewById(R.id.movie_title))).setText(movie.getMovieTitle());
+            ((TextView) (rootView.findViewById(R.id.movie_title))).setText(movie.getMovieTitle());
 
-            ImageView imageView = (ImageView)(rootView.findViewById(R.id.movie_thumbnail));
+            ImageView imageView = (ImageView) (rootView.findViewById(R.id.movie_thumbnail));
             String posterURLStr = movie.getPosterURL();
             Picasso.with(getActivity()).load(posterURLStr).into(imageView);
 
-            ((TextView)(rootView.findViewById(R.id.movie_release_date))).setText(movie.getMovieReleaseDate());
+            ((TextView) (rootView.findViewById(R.id.movie_release_date))).setText(movie.getMovieReleaseDate());
 
-            ((TextView)(rootView.findViewById(R.id.movie_rating)))
+            ((TextView) (rootView.findViewById(R.id.movie_rating)))
                     .setText
                             (String.valueOf(movie.getMovieUserRating()) + "/10");
 
-            TextView synopsis = (TextView)(rootView.findViewById(R.id.movie_synopsis));
-            synopsis.setText(movie.getMovieSynopsis());
-            synopsis.setMovementMethod(new ScrollingMovementMethod());
-
+            ((TextView) (rootView.findViewById(R.id.movie_synopsis))).setText(movie.getMovieSynopsis());
 
         }
 

@@ -3,14 +3,12 @@ package com.jeremy.mycompagny.popularmoviesapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,11 +41,16 @@ public class MainActivity extends Activity {
 
     private ArrayList<Movie> movieArrayList;
 
+    private String sortingOrder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "entered onCreate method");
 
         super.onCreate(savedInstanceState);
+
+        /* Get sort preference */
+        sortingOrder = Utility.getPreferredSortingOrder(this);
 
         /* Set the activity layout */
         setContentView(R.layout.activity_main);
@@ -57,11 +60,8 @@ public class MainActivity extends Activity {
 
             Log.e(LOG_TAG, "Network is not available");
 
-            Context context = getApplicationContext();
             CharSequence text = getString(R.string.network_not_available_message);
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
             toast.show();
 
         } else {
@@ -114,20 +114,58 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        // Test Network
+        if (!isNetworkAvailable()) {
+            Log.e(LOG_TAG, "Network is not available");
+
+            CharSequence text = getString(R.string.network_not_available_message);
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            String newSortingOrder = Utility.getPreferredSortingOrder(this);
+
+            if (newSortingOrder != null && !newSortingOrder.equals(sortingOrder)) {
+                Log.d(LOG_TAG, "updating movies via API call");
+                sortingOrder = newSortingOrder;
+
+                onRestart();
+
+            }
+
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+        Intent i = new Intent(getBaseContext(), MainActivity.class);
+
+        startActivity(i);
+        finish();
+
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
 
-        Parcelable[] movieArray = new Parcelable[movieArrayList.size()];
+        if (movieArrayList != null) {
+            Parcelable[] movieArray = new Parcelable[movieArrayList.size()];
 
-        for (int i = 0; i < movieArrayList.size(); i++) {
-            movieArray[i] = (movieArrayList.get(i));
+            for (int i = 0; i < movieArrayList.size(); i++) {
+                movieArray[i] = (movieArrayList.get(i));
+            }
+            outState.putParcelableArray(getString(R.string.movieArray), movieArray);
+
+            super.onSaveInstanceState(outState);
+
+            Log.d(LOG_TAG, "instanceState saved");
+            Log.d(LOG_TAG, "outState.containsKey(\"movieArray\"): "
+                    + String.valueOf(outState.containsKey("movieArray")));
         }
-        outState.putParcelableArray(getString(R.string.movieArray), movieArray);
-
-        super.onSaveInstanceState(outState);
-
-        Log.d(LOG_TAG, "instanceState saved");
-        Log.d(LOG_TAG, "outState.containsKey(\"movieArray\"): "
-                + String.valueOf(outState.containsKey("movieArray")));
     }
 
     @Override
@@ -353,11 +391,9 @@ public class MainActivity extends Activity {
      */
     public void updateMovies() {
 
+        // Create task
         FetchMoviesTask moviesTask = new FetchMoviesTask();
-        // Read shared Preferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortingOrder = prefs.getString(getString(R.string.pref_sorting_order_key),
-                getString(R.string.pref_sorting_order_default_value));
+
         // Execute the task
         moviesTask.execute(sortingOrder);
     }
