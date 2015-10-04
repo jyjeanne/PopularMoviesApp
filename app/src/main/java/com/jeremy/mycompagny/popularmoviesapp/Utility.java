@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 public class Utility {
     public static String getPreferredSortingOrder(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_sorting_order_key),
-                context.getString(R.string.pref_sorting_order_default_value));
+        return prefs.getString(context.getString(R.string.pref_sort_by_key),
+                context.getString(R.string.pref_sort_by_default));
     }
 }

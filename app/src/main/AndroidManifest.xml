@@ -4,6 +4,8 @@
 
     <!-- Application permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -22,6 +24,7 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -29,11 +32,16 @@
         </activity>
         <activity
             android:name=".MovieDetailActivity"
+            android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_movie_detail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jeremy.mycompagny.popularmoviesapp.MainActivity" />
         </activity>
+        <provider
+            android:authorities="com.jeremy.mycompagny.popularmoviesapp"
+            android:name=".database.MovieProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

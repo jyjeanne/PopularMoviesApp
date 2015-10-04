@@ -1,25 +1,38 @@
 package com.jeremy.mycompagny.popularmoviesapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MovieDetailActivity extends Activity {
+import com.jeremy.mycompagny.popularmoviesapp.fragments.MovieDetailFragment;
+
+/**
+ * Activty for  Movie details
+ */
+public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // adds allow Up navigation with the app icon in the action bar.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.activity_movie_detail);
+
         if (savedInstanceState == null) {
 
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new MovieDetailFragment())
+            Bundle arguments = new Bundle();
+
+            arguments.putParcelable(MovieDetailFragment.SELECTED_MOVIE_KEY, getIntent().getData());
+
+            MovieDetailFragment fragment = new MovieDetailFragment();
+            fragment.setArguments(arguments);
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.movie_detail_container, new MovieDetailFragment())
                     .commit();
         }
     }

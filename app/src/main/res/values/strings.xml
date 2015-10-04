@@ -1,7 +1,14 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res/android">
     <!-- General App setting-->
-
     <string name="app_name">Popular Movies</string>
+
+    <!-- Movie Detail -->
+    <string name="btn_favorite">Mark as favorite</string>
+    <string name="btn_delete_favorite">Remove from favorites</string>
+    <string name="reviews">Reviews</string>
+    <string name="trailers">Trailers</string>
+    <string name="action_share">Share</string>
+    <string name="no_trailer_available">Sorry! No trailer available.</string>
 
     <!-- Action setting -->
     <string name="action_discover_by_popularity">Discover by Popularity</string>
@@ -11,6 +18,25 @@
     <!-- Image setting -->
     <string name="image_base_URL">http://image.tmdb.org/t/p/</string>
     <string name="image_size_parameter">w185</string>
+
+    <string name="pref_sort_by">Sort By</string>
+    <string name="sort_by_key">sort_by</string>
+
+    <string name="pref_sort_by_label_popular">Most Popular</string>
+    <string name="pref_sort_by_value_popular" translatable="false">popularity.desc</string>
+    <string name="pref_sort_by_label_rated">Highest Rated</string>
+    <string name="pref_sort_by_value_rated" translatable="false">vote_average.desc</string>
+
+    <string name="pref_sort_by_label_favorites">My Favorites</string>
+    <string name="pref_sort_by_value_favorites" translatable="false">favorites</string>
+
+    <string name="pref_sort_by_key" translatable="false">sort</string>
+    <string name="pref_sort_by_default" translatable="false">popularity.desc</string>
+
+    <string name="pref_sorting_criteria_key">sort_by</string>
+    <string name="pref_sorting_order_key">sort_by</string>
+
+    <string name="sorting_criteria_key">sorting_criteria</string>
 
     <!-- API Setting -->
     <string name="API_base_URL">http://api.themoviedb.org/3/discover/movie</string>
@@ -22,19 +48,20 @@
 
     <string name="API_poster_base_URL">http://image.tmdb.org/t/p</string>
     <string name="title_activity_movie_detail">Movie Detail</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <string name="sort_by_key">sort_by</string>
 
+    <!-- Rate [CHAR LIMIT=NONE] -->
+    <string name="format_full_friendly_rate"><xliff:g id="rate">%1$s</xliff:g>/10.0</string>
     <string name="movieArray">movieArray</string>
     <string name="movie">movie</string>
     <string name="discover">discover</string>
     <string name="moviedb_api_url">api.themoviedb.org</string>
     <string name="number_three">3</string>
     <string name="http_protocol">http</string>
-    <string name="pref_sorting_criteria_key">sort_by</string>
-    <string name="pref_sorting_order_key">sort_by</string>
-    <string name="pref_sorting_order_default_value">popularity.desc</string>
-    <string name="sorting_criteria_key">sorting_criteria</string>
+    <string name="info_no_connection_available">Please, check if this device has an internet connection!</string>
+    <string name="info_no_favorite_movies">There is no favorite movies</string>
+
     <string name="movie_key">movie</string>
     <string name="movie_array_key">movieArray</string>
     <string name="network_not_available_message">Network is not available</string>
@@ -48,5 +75,8 @@
         <item>@string/API_param_descending_popularity</item>
         <item>@string/API_param_descending_rating</item>
     </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
